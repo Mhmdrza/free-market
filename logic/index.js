@@ -7,23 +7,23 @@ let transactionNumber = 0;
 let outOfBussiness = [];
 
 
-function deal(n1, n2) {
+function deal(person1, person2) {
     if (coinFlip()) {
-        n1.cash -= 1;
-        n2.cash += 1;
-        if (n1.cash < 1) {
-            outOfBussiness.push(n1);
-            activeNodes = activeNodes.filter(node => node.id !== n1.id);
+        person1.cash -= 1;
+        person2.cash += 1;
+        if (person1.cash < 1) {
+            outOfBussiness.push(person1);
+            activeNodes = activeNodes.filter(node => node.id !== person1.id);
         }
-        logTransactions(n1, n2)
+        logTransactions(person1, person2)
     } else {
-        n1.cash += 1;
-        n2.cash -= 1;
-        if (n2.cash < 1) {
-            outOfBussiness.push(n2);
-            activeNodes = activeNodes.filter(node => node.id !== n2.id);
+        person1.cash += 1;
+        person2.cash -= 1;
+        if (person2.cash < 1) {
+            outOfBussiness.push(person2);
+            activeNodes = activeNodes.filter(node => node.id !== person2.id);
         }
-        logTransactions(n2, n1)
+        logTransactions(person2, person1)
     } 
 }
 
@@ -42,19 +42,32 @@ function iteratre() {
     }
 }
 
-while (activeNodes.length > 1) {
-    iteratre();
+function run() {
+    while (activeNodes.length > 1) {
+        iteratre();
+    }
+    return { 
+        luckiest: activeNodes[0],
+        outOfBussiness,
+        transactionLogs,
+        transactionNumber,
+        nodes,
+    }
 }
+
+
+module.exports = run;
+run();
 // console.log(transactionLogs);
-console.log({ luckiest: activeNodes[0], outOfBussiness });
 
 function pickRandomPerson () {
     return randomNumber(0, activeNodes.length - 1)
 }
 function logTransactions(giver, reciever) {
     const log = `${transactionNumber += 1}: ${giver.id} -> ${reciever.id}`;
-    console.log(log);
-    transactionLogs.push(log);
+    const transcation = [giver.id, giver.cash, reciever.id, reciever.cash];
+    // console.log(log);
+    transactionLogs.push(transcation);
 }
 function randomNumber(min, max) {
     return (Math.random() * (max - min) + min).toFixed(0);
