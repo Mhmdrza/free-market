@@ -37,8 +37,6 @@ function showTransaction ( c, giverId, giverCash, reciverId, reciverCash ) {
   const el2= cashe[reciverId] || (cashe[reciverId] = document.querySelector('#' + nodeIdGenerator(reciverId)));
   const el1t= cashe[giverId+'t'] || (cashe[giverId+'t'] = document.querySelector('#' + nodeTextIdGenerator(giverId)));
   const transactionPanel = cashe['transactionPanel'] || (cashe['transactionPanel'] = document.querySelector('#transactionPanel'));
-  const transactionPanel2 = cashe['transactionPanel2'] || (cashe['transactionPanel2'] = document.querySelector('#transactionPanel2'));
-  const transactionPanel3 = cashe['transactionPanel3'] || (cashe['transactionPanel3'] = document.querySelector('#transactionPanel3'));
   const transactionNumber = cashe['transactionNumber'] || (cashe['transactionNumber'] = document.querySelector('#transactionNumber'));
   try {
     drawBar(el1, giverCash, false);
@@ -71,7 +69,7 @@ function startSimulation() {
 }
 
 export default function Home() {
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(0);
   const [people, setPeople] = useState(10);
   const [startingMoney, setStartingMoney] = useState(5);
   const nodes = Array(people).fill().map((_, index) => ({ cash: startingMoney, id: index }));
@@ -82,6 +80,15 @@ export default function Home() {
       drawBar(el1, node.cash, true);
     })
   }, []);
+
+  useEffect(() => {
+    try {
+      document.querySelector('#transactionPanel').textContent ='';
+    } catch (error) {
+      
+    }
+  }, [started]);
+  
   
   return (
     <div className='p-4'>
@@ -105,7 +112,7 @@ export default function Home() {
           <li>No more trading = collapse of economy</li>
         </ul>
         {<div className='d-flex justify-content-center0 mt-5'>
-          <button className=' btn btn-primary' onClick={()=>(startSimulation(), setStarted(true))} >
+          <button className=' btn btn-primary' onClick={()=>(startSimulation(), setStarted(started+1))} >
             {started? "Restart": 'Start'} simulation
           </button>
         </div>}
@@ -135,7 +142,7 @@ export default function Home() {
             </div>
           ))}
           </div>
-          {started && <>
+          {!!started && <>
             <div className='p-0 col-md-3 col-lg-2 d-flex flex-column-reverse flex-md-column justify-content-around'>
               <div className='ms-md-2 mt-3 col-xs-6 col-md-12' id='transactionPanel' style={{
                 display: 'flex',
