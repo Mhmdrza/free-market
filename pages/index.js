@@ -161,7 +161,7 @@ export default function Home() {
       <h4>Summary:</h4>
       <p>
         Even in the absoultely fair and free market like this, all the money will eventually endup in one person hand.
-        It's means the collapse of the economy. people will flip the table and re-distrubte the wealth by force.
+        It means the collapse of the economy. at this point people will flip the table and re-distrubte the wealth by force.
         However there is a solution to prevent it. The Rich should voluntarly giveaway some money to poor to thrive the economy.
       </p>
       <footer className={styles.footer}>
