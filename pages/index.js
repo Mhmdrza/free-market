@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useState } from 'react';
 import run from '../logic';
-import styles from '../styles/Home.module.css'
+
 
 const names = [
   'Liam', 
@@ -37,6 +37,8 @@ function showTransaction ( c, giverId, giverCash, reciverId, reciverCash ) {
   const el2= cashe[reciverId] || (cashe[reciverId] = document.querySelector('#' + nodeIdGenerator(reciverId)));
   const el1t= cashe[giverId+'t'] || (cashe[giverId+'t'] = document.querySelector('#' + nodeTextIdGenerator(giverId)));
   const transactionPanel = cashe['transactionPanel'] || (cashe['transactionPanel'] = document.querySelector('#transactionPanel'));
+  const transactionPanel2 = cashe['transactionPanel2'] || (cashe['transactionPanel2'] = document.querySelector('#transactionPanel2'));
+  const transactionPanel3 = cashe['transactionPanel3'] || (cashe['transactionPanel3'] = document.querySelector('#transactionPanel3'));
   const transactionNumber = cashe['transactionNumber'] || (cashe['transactionNumber'] = document.querySelector('#transactionNumber'));
   try {
     drawBar(el1, giverCash, false);
@@ -44,17 +46,18 @@ function showTransaction ( c, giverId, giverCash, reciverId, reciverCash ) {
       el1t.style.color = 'gray';
     }
     drawBar(el2, reciverCash, true);
-    transactionPanel.innerHTML += `\n<span>${names[giverId]}</span> -> <span>${names[reciverId]}</span>`
     transactionNumber.textContent = c;
+    transactionPanel.append(`${names[giverId]}  →  ${names[reciverId]} `)
   } catch (error) {
     console.log(error);
   }
 }
 
+let rafId;
 function startSimulation() {
   const { transactionLogs, transactionNumber, luckiest, outOfBussiness } = run();
   let c = 0;
-  let rafId;
+  cancelAnimationFrame(rafId);
   function rafRunner () {
     if ( c < transactionNumber )  {
       showTransaction(c, ...transactionLogs[c])
@@ -64,7 +67,7 @@ function startSimulation() {
       cancelAnimationFrame(rafId)
     }
   }
-  rafRunner();
+  return rafRunner();
 }
 
 export default function Home() {
@@ -81,97 +84,86 @@ export default function Home() {
   }, []);
   
   return (
-    <div className={styles.container}>
+    <div className='p-4'>
       <Head>
         <title>Free market Simulation</title>
         <meta name="description" content="Simulation of free market" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-        <h1 className={styles.title}>
+      <main className='container'>
+        <h1 className='h1 my-4'>
           Simulation of free market 
         </h1>
-          <h2>rules:</h2>
-          <ul className={styles.description}>
-            <li>Everyone starts with 5$ cash</li>
-            <li>Anyone can trade with others (chosen randomly)</li>
-            <li>50 / 50 chance of winning in trade</li>
-            <li>winner gets +1 and other lose -1</li>
-            <li>If someone reaches 0$ they cant trade anymore</li>
-          </ul>
-          {!started && <div style={{textAlign: 'center', padding: '1rem 0'}}>
-            <button onClick={()=>(startSimulation(), setStarted(true))} style={{padding: '.5rem 1rem'}}>
-              Start simulation
-            </button>
-          </div>}
-        <div style={{display: 'flex', justifyContent: 'space-around', width: '100%', flexWrap: 'wrap2'}}>
-          <div style={{
+        <h2>rules:</h2>
+        <ul className=''>
+          <li>Everyone starts with <code>5$</code> cash</li>
+          <li>Anyone can trade with others <small>(chosen randomly)</small></li>
+          <li>50 / 50 chance of winning in trade</li>
+          <li>Luckier person gets <code>+1</code> and other lose <code>-1</code></li>
+          <li>If someone reaches <code>0$</code> they cant trade anymore</li>
+          <li>No more trading = collapse of economy</li>
+        </ul>
+        {<div className='d-flex justify-content-center0 mt-5'>
+          <button className='ms-4 btn btn-primary' onClick={()=>(startSimulation(), setStarted(true))} >
+            {started? "Restart": 'Start'} simulation
+          </button>
+        </div>}
+        <div className='ms-4'>
+          <div className='row flex-row-reverse justify-content-end'>
+          <div className='mb-5 col-md-9 col-lg-6' style={{
             display: 'flex',
             alignItems: 'flex-end',
-            width: '100%',
             justifyContent: 'space-around',
-            height: '200px',
+            height: '250px',
           }}>
           { nodes.map( ({id, cash}) => (
-            <div key={id} style={{
-              width: '30px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              // border: '1px solid yellow'
-            }}>
-              <span id={nodeIdGenerator(id)} style={{
-                width: '10px',
-                border: '1px solid yellow',
-                fontSize: '.5rem',
-                textAlign: 'center'
+            <div key={id} className='d-flex justify-content-center align-items-center flex-column col-1'>
+              <span id={nodeIdGenerator(id)} className='d-flex justify-content-center align-items-baseline' style={{
+                width: '50%',
+                border: '1px solid white',
+                fontSize: '95%',
+                textAlign: 'center',
               }}/>
-              <span style={{ marginTop: '10px', fontSize: '.5rem'}} id={nodeTextIdGenerator(id)}>{names[id]}</span>
+              <span id={nodeTextIdGenerator(id)} style={{
+                transform: 'rotate(90deg) translateX(2rem)',
+                // position: 'absolute'
+              }}>{names[id]}</span>
             </div>
           ))}
           </div>
+          {started && <>
+            <div className='p-0 col-md-3 col-lg-2 d-flex flex-column justify-content-around'>
+              <div className='mt-3 ' id='transactionPanel' style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column-reverse',
+                overflowY: 'scroll',
+                height: '200px',
+                hyphens: 'manual'
+              }}>
+              </div>
+              <div >Number of trades: <span id='transactionNumber' className=''></span></div>
+            </div>
+          </>}
+          </div>
         </div>
+        <br/>
+        <h4>Summary:</h4>
+        <p className='col-md-8 mt-2'>
+          Even in the absoultely fair and free market like this, all the money will eventually endup in one person hand.
+          Which means the collapse of the economy.
+        </p>
       </main>
 
-      {started && <>
-        <h3>
-          Stats:
-        </h3>
-        <div style={{display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between'}}>
-          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>Number of transcations: <span id='transactionNumber' className={styles.transactionNumber}></span></div>
-          <div style={{
-            display: 'flex',
-            position: 'relative',
-            alignItems: 'center',
-            flexDirection: 'column-reverse',
-            overflowY: 'scroll',
-            height: '200px',
-            padding: '0 1rem',
-            width: '50vw',
-          }}>
-            <pre id='transactionPanel'></pre>
-          </div>
-          {/* <p>Lucky Person: <strong>{names[luckiest.id]}</strong></p> */}
-          {/* <p style={{display: 'flex', flexWrap: 'wrap', alignItems: 'baseline'}}>Out of Bussiness: {Object.values(outOfBussiness).map(p => <small key={p.id}>{names[p.id]},&nbsp;</small>)}</p> */}
-        </div>
-      </>}
-      <br/>
-      <h4>Summary:</h4>
-      <p>
-        Even in the absoultely fair and free market like this, all the money will eventually endup in one person hand.
-        It means the collapse of the economy. at this point people will flip the table and re-distrubte the wealth by force.
-        However there is a solution to prevent it. The Rich should voluntarly giveaway some money to poor to thrive the economy.
-      </p>
-      <footer className={styles.footer}>
+      <footer className='container mt-3'>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
         >
           Powered by{' '}
-          <span className={styles.logo}>
+          <span className='mt-3'>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>

@@ -1,8 +1,8 @@
 const startingMoney = 5;
 const numberOfPeople = 10;
 const nodes = Array(numberOfPeople).fill().map((_, index) => ({ cash: startingMoney, id: index }));
-let activeNodes = [...nodes];
-const transactionLogs = [];
+let activeNodes;
+let transactionLogs = [];
 let transactionNumber = 0;
 let outOfBussiness = [];
 
@@ -43,6 +43,9 @@ function iteratre() {
 }
 
 function run() {
+    activeNodes = JSON.parse(JSON.stringify(nodes));
+    transactionLogs = [];
+    transactionNumber = 0;
     while (activeNodes.length > 1) {
         iteratre();
     }
