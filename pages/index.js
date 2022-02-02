@@ -123,6 +123,9 @@ export default function Home() {
               <span id={nodeIdGenerator(id)} className='d-flex justify-content-center align-items-baseline' style={{
                 width: '50%',
                 border: '1px solid white',
+                borderTopRightRadius: 2,
+                borderTopLeftRadius: 2,
+                transition: 'background .15s',
                 fontSize: '95%',
                 textAlign: 'center',
               }}/>
@@ -134,7 +137,7 @@ export default function Home() {
           </div>
           {started && <>
             <div className='p-0 col-md-3 col-lg-2 d-flex flex-column-reverse flex-md-column justify-content-around'>
-              <div className='mt-3 col-sm-6' id='transactionPanel' style={{
+              <div className='mt-3 col-xs-6 col-md-12' id='transactionPanel' style={{
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'column-reverse',
@@ -143,7 +146,7 @@ export default function Home() {
                 hyphens: 'manual'
               }}>
               </div>
-              <div >Number of trades: <span id='transactionNumber' className=''></span></div>
+              <div >Number of trades: <span id='transactionNumber' className='py-sm-2 py-0'></span></div>
             </div>
           </>}
           </div>
