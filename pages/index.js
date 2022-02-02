@@ -105,17 +105,18 @@ export default function Home() {
           <li>No more trading = collapse of economy</li>
         </ul>
         {<div className='d-flex justify-content-center0 mt-5'>
-          <button className='ms-4 btn btn-primary' onClick={()=>(startSimulation(), setStarted(true))} >
+          <button className=' btn btn-primary' onClick={()=>(startSimulation(), setStarted(true))} >
             {started? "Restart": 'Start'} simulation
           </button>
         </div>}
-        <div className='ms-4'>
+        <div className=''>
           <div className='row flex-row-reverse justify-content-end'>
-          <div className='mb-5 col-md-9 col-lg-6' style={{
+          <div className='mb-5 col-md-9 col-lg-6 p-0' style={{
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'space-around',
             height: '250px',
+            pointerEvents: 'none'
           }}>
           { nodes.map( ({id, cash}) => (
             <div key={id} className='d-flex justify-content-center align-items-center flex-column col-1'>
@@ -127,14 +128,13 @@ export default function Home() {
               }}/>
               <span id={nodeTextIdGenerator(id)} style={{
                 transform: 'rotate(90deg) translateX(2rem)',
-                // position: 'absolute'
               }}>{names[id]}</span>
             </div>
           ))}
           </div>
           {started && <>
-            <div className='p-0 col-md-3 col-lg-2 d-flex flex-column justify-content-around'>
-              <div className='mt-3 ' id='transactionPanel' style={{
+            <div className='p-0 col-md-3 col-lg-2 d-flex flex-column-reverse flex-md-column justify-content-around'>
+              <div className='mt-3 col-sm-6' id='transactionPanel' style={{
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'column-reverse',
@@ -157,6 +157,11 @@ export default function Home() {
       </main>
 
       <footer className='container mt-3'>
+        <a href='https://github.com/Mhmdrza/free-market'>
+          View the project on Github
+        </a>
+        <br/>
+        &nbsp;
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
