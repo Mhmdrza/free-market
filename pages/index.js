@@ -91,7 +91,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className='container'>
+      <main className='container p-0'>
         <h1 className='h1 my-4'>
           Simulation of free market 
         </h1>
@@ -109,7 +109,7 @@ export default function Home() {
             {started? "Restart": 'Start'} simulation
           </button>
         </div>}
-        <div className=''>
+        <div className='ps-2'>
           <div className='row flex-row-reverse justify-content-end'>
           <div className='mb-5 col-md-9 col-lg-6 p-0' style={{
             display: 'flex',
@@ -137,7 +137,7 @@ export default function Home() {
           </div>
           {started && <>
             <div className='p-0 col-md-3 col-lg-2 d-flex flex-column-reverse flex-md-column justify-content-around'>
-              <div className='mt-3 col-xs-6 col-md-12' id='transactionPanel' style={{
+              <div className='ms-md-2 mt-3 col-xs-6 col-md-12' id='transactionPanel' style={{
                 display: 'flex',
                 alignItems: 'center',
                 flexDirection: 'column-reverse',
@@ -146,7 +146,7 @@ export default function Home() {
                 hyphens: 'manual'
               }}>
               </div>
-              <div >Number of trades: <span id='transactionNumber' className='py-sm-2 py-0'></span></div>
+              <div >Number of trades: <span id='transactionNumber' className='ms-md-4 py-sm-2 py-0'></span></div>
             </div>
           </>}
           </div>
