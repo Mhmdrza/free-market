@@ -111,6 +111,7 @@ export default function Home() {
           <li>If someone reaches <code>0$</code> they cant trade anymore</li>
           <li>No more trading = collapse of economy</li>
         </ul>
+        <a href='https://www.youtube.com/shorts/K27-pu62VaY'>Watch Jordan peterson's short explaniation here</a>
         {<div className='d-flex justify-content-center0 mt-5'>
           <button className=' btn btn-primary' onClick={()=>(startSimulation(), setStarted(started+1))} >
             {started? "Restart": 'Start'} simulation
